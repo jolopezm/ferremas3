@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Datos del Banco Central</title>
+</head>
+<body>
+    <h1>Datos del Banco Central</h1>
+    {% if series_data %}
+        <ul>
+            {% for item in series_data %}
+                <li>{{ item.indexDateString }}: {{ item.value }}</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No hay datos disponibles.</p>
+    {% endif %}
+</body>
+</html>
