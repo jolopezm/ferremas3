@@ -1,19 +1,19 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Ferremas Home</title>
+    <title>Valor del Dólar</title>
 </head>
 <body>
-    <h1>Ferremas Home</h1>
-    {% if posts %}
-        {% for post in posts %}
-            <h2>{{ post.title }}</h2>
-            <p>{{ post.content }}</p>
-            <p>Published on: {{ post.created_at }}</p>
-        {% endfor %}
+    <h1>Valor del Dólar</h1>
+    {% if series_data %}
+        <ul>
+            {% for item in series_data %}
+                <li>{{ item.indexDateString }}: {{ item.value }}</li>
+            {% endfor %}
+        </ul>
     {% else %}
-        <p>No posts available.</p>
+        <p>No hay datos disponibles.</p>
     {% endif %}
 </body>
 </html>

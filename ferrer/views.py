@@ -1,29 +1,31 @@
+import requests
+from datetime import datetime, timedelta
 from django.shortcuts import render
 from django.http import JsonResponse
-import requests
 
 def index(request):
-    return render(request, 'index.html')
+    # Obtener la fecha actual en el formato YYYY-MM-DD
+    today = datetime.today()
+    yesterday = today - timedelta(days=1)
+    yesterday = yesterday.strftime('%Y-%m-%d')
+    today = today.strftime('%Y-%m-%d')
 
-import json
+    # Tu nombre de usuario y contraseña
+    user = 'nico.munozt@duocuc.cl'
+    password = 'Host_Duoc65'
+    timeseries = 'F073.TCO.PRE.Z.D'  # Supongamos que este es el código de serie del dólar
 
-def obtener_datos_banco_central(request):
-    url = 'https://si3.bcentral.cl/SieteRestWS/SieteRestWS.ashx'
-    params = {
-        'user': 'nico.munozt@duocuc.cl',  # Asegúrate de que tu nombre de usuario esté correctamente codificado
-        'pass': 'Host_Duoc65',    # Reemplaza 'tu_contraseña' con tu contraseña real
-        'firstdate': '2023-01-01',
-        'lastdate': '2023-12-31',
-        'timeseries': 'F073.TCO.PRE.Z.D',  # Serie de tiempo de ejemplo
-        'function': 'GetSeries'
-    }
+    # URL de la API
+    url = f'https://si3.bcentral.cl/SieteRestWS/SieteRestWS.ashx?user={user}&pass={password}&firstdate={today}&lastdate={today}&timeseries={timeseries}&function=GetSeries'
 
-    response = requests.get(url, params=params)
+    # Realizar la solicitud a la API
+    response = requests.get(url)
 
     if response.status_code == 200:
         data = response.json()
-        print(json.dumps(data, indent=4))  # Añade esta línea para imprimir los datos en la consola
         series_data = data.get('Series', {}).get('Obs', [])
-        return render(request, 'datos_banco_central.html', {'series_data': series_data})
+
+        # Renderizar los datos en la plantilla
+        return render(request, 'index.html', {'series_data': series_data})
     else:
         return JsonResponse({'error': 'No se pudo obtener los datos del Banco Central'}, status=500)
